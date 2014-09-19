@@ -22,6 +22,15 @@ public class Grid {
 		}
 	}
 	
+	public Grid(Grid source) {
+	   mGrid = new int[9][9];
+	   for(int i = 0; i < 9; i++) {
+	      for(int j = 0; j < 9; j++) {
+	         mGrid[i][j] = source.mGrid[i][j];
+	      }
+	   }
+	}
+	
 	public int getValue(int row, int column) {
 		return mGrid[row][column];
 	}
@@ -31,7 +40,8 @@ public class Grid {
 	}
 	
 	public boolean checkValue(int row, int column, int value) {
-		int oldValue = mGrid[row][column] = value;
+		int oldValue = mGrid[row][column];
+		mGrid[row][column] = value;
 		boolean result = isValid();
 		mGrid[row][column] = oldValue;
 		return result;
@@ -99,5 +109,14 @@ public class Grid {
 			}
 		}
 		return true;
+	}
+	
+	public void print() {
+	   for(int i = 0; i < 9; i++) {
+	      for(int j = 0; j < 9; j++) {
+	         System.out.print(mGrid[i][j] + " ");
+	      }
+	      System.out.println();
+	   }
 	}
 }
