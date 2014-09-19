@@ -17,7 +17,11 @@ public class SudokuSolver {
 	public static void main(String[] args) {
 		Grid grid = new Grid(startingGrid);
 		OptionsGrid optionsGrid = new OptionsGrid(grid);
-		while(optionsGrid.fillUniqueSolutions());
+		
+		SinglesScanner singlesScanner = new SinglesScanner(optionsGrid);
+		
+		while(singlesScanner.fillSingleSolutions());
+		
 		grid.print();
 	}
 }
