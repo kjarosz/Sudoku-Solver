@@ -1,6 +1,7 @@
 package sudokusolver;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -11,21 +12,25 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JFormattedTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.text.MaskFormatter;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import java.text.ParseException;
 
 public class SudokuSolver extends JFrame {	
 	private JTextField mGrid[][];
 	
 	public SudokuSolver() {
 	   super("Sudoku Solver");
-	   setSize(400, 350);
+	   setSize(350, 350);
 	   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-      Container contentPanel = this.getContentPane();
-      contentPanel.setLayout(new BorderLayout());
-      
+	
+	   Container contentPanel = this.getContentPane();
+	   contentPanel.setLayout(new BorderLayout());
+	   
 	   createGrid();
 	   createButtonPanel();
 	   
@@ -39,8 +44,13 @@ public class SudokuSolver extends JFrame {
 	   for(int i = 0; i < 9; i++) {
 	      mGrid[i] = new JTextField[9];
 	      for(int j = 0; j < 9; j++) {
-	         mGrid[i][j] = new JTextField(1);
-	         mGrid[i][j].setHorizontalAlignment(JTextField.CENTER);
+	         try {
+	            mGrid[i][j] = new JFormattedTextField(new MaskFormatter("#"));
+	         }
+	         catch (ParseException ex) {
+	            mGrid[i][j] = new JTextField(1);
+	         }
+	         mGrid[i][j].setHorizontalAlignment(JFormattedTextField.CENTER);
 	         gridPanel.add(mGrid[i][j]);
 	      }
 	   }
@@ -88,8 +98,9 @@ public class SudokuSolver extends JFrame {
       for(int i = 0; i < 9; i++) {
          for(int j = 0; j < 9; j++) {
             String fieldText = mGrid[i][j].getText();
-            if(fieldText.isEmpty()) {
+            if("".equals(fieldText) || " ".equals(fieldText)) {
                grid[i][j] = 0;
+               mGrid[i][j].setForeground(Color.BLUE);
             } else {
                try {
                   int entry = Integer.parseInt(fieldText);
@@ -100,7 +111,8 @@ public class SudokuSolver extends JFrame {
                      return null;
                   }
                } catch(NumberFormatException ex) {
-                  JOptionPane.showMessageDialog(this, "Only integer values between 1 and 9 are allowed in the cells!");
+                  System.out.println("Warning: cell ("+i+", "+j+") contains non-int character '" + fieldText + "'; assuming 0.");
+                  grid[i][j] = 0;
                   return null;
                }
             }
