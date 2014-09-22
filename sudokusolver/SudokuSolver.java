@@ -40,6 +40,7 @@ public class SudokuSolver extends JFrame {
 	      mGrid[i] = new JTextField[9];
 	      for(int j = 0; j < 9; j++) {
 	         mGrid[i][j] = new JTextField(1);
+	         mGrid[i][j].setHorizontalAlignment(JTextField.CENTER);
 	         gridPanel.add(mGrid[i][j]);
 	      }
 	   }
