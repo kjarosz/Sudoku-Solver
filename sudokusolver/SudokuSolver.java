@@ -51,6 +51,7 @@ public class SudokuSolver extends JFrame {
 	            mGrid[i][j] = new JTextField(1);
 	         }
 	         mGrid[i][j].setHorizontalAlignment(JFormattedTextField.CENTER);
+	         mGrid[i][j].setForeground(Color.BLACK);
 	         gridPanel.add(mGrid[i][j]);
 	      }
 	   }
@@ -152,8 +153,10 @@ public class SudokuSolver extends JFrame {
 	
 	private void clearGrid() {
 	   for(int i = 0; i < 9; i++)
-	      for(int j = 0; j < 9; j++)
+	      for(int j = 0; j < 9; j++) {
 	         mGrid[i][j].setText("");
+	         mGrid[i][j].setForeground(Color.BLACK);
+	      }
 	}
 	
 	public static void main(String[] args) {
