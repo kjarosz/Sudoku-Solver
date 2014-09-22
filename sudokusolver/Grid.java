@@ -46,7 +46,22 @@ public class Grid {
 		mGrid[row][column] = oldValue;
 		return result;
 	}
-
+	
+	public boolean isSolved() {
+	   if(!isValid())
+	      return false;
+	   
+	   for(int i = 0; i < 9; i++) {
+	      for(int j = 0; j < 9; j++) {
+	         if(mGrid[i][j] == 0) {
+	            return false;
+	         }
+	      }
+	   }
+	   
+	   return true;
+	}
+	   
 	public boolean isValid() {
 		for(int i = 0; i < 3; i++) {
 			for(int j = 0; j < 3; j++) {

@@ -1,26 +1,22 @@
 package sudokusolver;
 
-public class OptionsGrid {
-	private Grid mParentGrid;
-	
+public class OptionsGrid extends Grid {
 	private boolean[][][] mValidEntries;
-	
-	public OptionsGrid(Grid grid) {
-		mParentGrid = grid;
+
+   public OptionsGrid() {
+      mValidEntries = new boolean[9][9][9];
+      clearEntries();
+   }
+   
+	public OptionsGrid(int[][] startingGrid) {
+		super(startingGrid);
 		mValidEntries = new boolean[9][9][9];
-		for(int i = 0; i < 9; i++) {
-			for(int j = 0; j < 9; j++) {
-				for(int k = 0; k < 9; k++) {
-					mValidEntries[i][j][k] = false;
-				}
-			}
-		}
-		
+		clearEntries();
 		findAllValidOptions();
 	}
 	
 	public OptionsGrid(OptionsGrid source) {
-	   mParentGrid = new Grid(source.mParentGrid);
+	   super(source);
 	   mValidEntries = new boolean[9][9][9];
 	   for(int i = 0; i < 9; i++) {
 	      for(int j = 0; j < 9; j++) {
@@ -29,6 +25,16 @@ public class OptionsGrid {
 	         }
 	      }
 	   }
+	}
+	
+	private void clearEntries() {
+      for(int i = 0; i < 9; i++) {
+         for(int j = 0; j < 9; j++) {
+            for(int k = 0; k < 9; k++) {
+               mValidEntries[i][j][k] = false;
+            }
+         }
+      }
 	}
 	
 	/*
@@ -40,11 +46,11 @@ public class OptionsGrid {
 	private void findAllValidOptions() {
 		for(int i = 0; i < 9; i++) {
 			for(int j = 0; j < 9; j++) {
-				if(mParentGrid.getValue(i, j) != 0)
+				if(super.getValue(i, j) != 0)
 				   continue;
 				
 				for(int k = 0; k < 9; k++) {
-					mValidEntries[i][j][k] = mParentGrid.checkValue(i, j, k+1);
+					mValidEntries[i][j][k] = checkValue(i, j, k+1);
 				}
 			}
 		}
@@ -62,14 +68,13 @@ public class OptionsGrid {
 	 * value and correct the valid entry listing to account
 	 * for the new value.
 	 */
-	public boolean setValue(int row, int column, int value) {
-	   if(checkEntry(row, column, value)) {
-	      mParentGrid.setValue(row, column, value);
-	      correctValidEntries(row, column, value);
-	      return true;
-	   } else {
-	      return false;
-	   }
+	public void setValue(int row, int column, int value) {
+	   if(!checkEntry(row, column, value))
+	      return;
+	   
+      super.setValue(row, column, value);
+      correctValidEntries(row, column, value);
+	   
 	}
 	
 	private void correctValidEntries(int row, int column, int value) {
@@ -103,5 +108,26 @@ public class OptionsGrid {
 	   for(int i = 0; i < 9; i++) {
 	      mValidEntries[i][column][value-1] = false;
 	   }
+	}
+
+	/*
+	 * This function will check if the grid is still solvable
+	 */
+	public boolean isContradictory() {
+	   for(int i = 0; i < 9; i++) {
+	      nextEntry:
+	      for(int j = 0; j < 9; j++) {
+	         if(getValue(i, j) != 0) 
+	            continue;
+	         
+	         for(int k = 0; k < 9; k++) {
+	            if(mValidEntries[i][j][k])
+	               continue nextEntry;
+	         }
+	         
+	         return true;
+	      }
+	   }
+	   return false;
 	}
 }
