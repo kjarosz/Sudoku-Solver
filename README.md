@@ -1,9 +1,7 @@
 Sudoku-Solver
 =============
 
-Solves sudoku puzzles.
-
-Currently there is not way to input the sudoku puzzle while its running. You have to input it into the variable `startingGrid` as a 9x9 matrix.
+Solves sudoku puzzles. Input values in the correct grids, press solve, and tada.
 
 To fix whitespacing, set your editor's tab width to 3.
 
