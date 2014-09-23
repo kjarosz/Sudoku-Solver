@@ -20,23 +20,25 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import java.text.ParseException;
 
-public class SudokuSolver extends JFrame {	
+public class SudokuSolver extends JFrame {
 	private JTextField mGrid[][];
-	
+	private boolean mSolved;
+
 	public SudokuSolver() {
 	   super("Sudoku Solver");
 	   setSize(350, 350);
 	   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	
+
 	   Container contentPanel = this.getContentPane();
 	   contentPanel.setLayout(new BorderLayout());
-	   
+
+	   mSolved = false;
 	   createGrid();
 	   createButtonPanel();
-	   
+
 	   setVisible(true);
 	}
-	
+
 	private void createGrid() {
 	   JPanel gridPanel = new JPanel();
 	   gridPanel.setLayout(new GridLayout(9, 9, 0, 0));
@@ -57,43 +59,43 @@ public class SudokuSolver extends JFrame {
 	   }
 	   getContentPane().add(gridPanel, BorderLayout.CENTER);
 	}
-	
+
 	private void createButtonPanel() {
-      JPanel buttonPanel = new JPanel();
-      
+      JPanel buttonPanel = new JPanel(new BorderLayout());
+
       JButton solveButton = new JButton("Solve");
       solveButton.addActionListener(new ActionListener() {
          @Override
          public void actionPerformed(ActionEvent e) {
-            solveGrid();
+			if(mSolved) {
+				clearGrid();
+				solveButton.setText("Solve");
+				mSolved = false;
+			}
+			else {
+				solveGrid();
+				solveButton.setText("Clear");
+				mSolved = true;
+			}
          }
       });
       buttonPanel.add(solveButton);
-      
-      JButton clearButton = new JButton("Clear");
-      clearButton.addActionListener(new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            clearGrid();
-         }
-      });
-      buttonPanel.add(clearButton);
-      
+
       getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 	}
-	
+
 	private void solveGrid() {
 	   int grid[][] = getInputGrid();
 	   if(grid == null)
 	      return;
-	   
+
 	   final OptionsGrid solution = getSolution(grid);
 	   if(solution == null)
 	      return;
-	   
+
 	   updateGridWithSolution(solution);
 	}
-	
+
 	private int[][] getInputGrid() {
       int grid[][] = new int[9][9];
       for(int i = 0; i < 9; i++) {
@@ -121,14 +123,14 @@ public class SudokuSolver extends JFrame {
       }
       return grid;
 	}
-	
+
 	private OptionsGrid getSolution(int grid[][]) {
       OptionsGrid optionsGrid = new OptionsGrid(grid);
-      
+
       SinglesScanner singlesScanner = new SinglesScanner(optionsGrid);
-      
+
       while(singlesScanner.fillSingleSolutions());
-      
+
       if(!optionsGrid.isSolved()) {
          Guesser guesser = new Guesser(optionsGrid);
          OptionsGrid solution = guesser.solve();
@@ -142,7 +144,7 @@ public class SudokuSolver extends JFrame {
          return optionsGrid;
       }
 	}
-	
+
 	private void updateGridWithSolution(OptionsGrid solution) {
 	   for(int i = 0; i < 9; i++) {
 	      for(int j = 0; j < 9; j++) {
@@ -150,7 +152,7 @@ public class SudokuSolver extends JFrame {
 	      }
 	   }
 	}
-	
+
 	private void clearGrid() {
 	   for(int i = 0; i < 9; i++)
 	      for(int j = 0; j < 9; j++) {
@@ -158,7 +160,7 @@ public class SudokuSolver extends JFrame {
 	         mGrid[i][j].setForeground(Color.BLACK);
 	      }
 	}
-	
+
 	public static void main(String[] args) {
 	   // Set look and feel for the GUI
 	   try {
