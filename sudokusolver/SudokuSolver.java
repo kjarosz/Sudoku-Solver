@@ -122,6 +122,7 @@ public class SudokuSolver extends JFrame {
 				clearGrid();
 				solveButton.setText("Solve");
 				mSolved = false;
+				mGrid[0][0].requestFocus();
 			}
 			else {
 				solveGrid();
