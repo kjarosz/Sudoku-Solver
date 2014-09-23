@@ -63,7 +63,7 @@ public class SudokuSolver extends JFrame {
 	private void createButtonPanel() {
       JPanel buttonPanel = new JPanel(new BorderLayout());
 
-      JButton solveButton = new JButton("Solve");
+      final JButton solveButton = new JButton("Solve");
       solveButton.addActionListener(new ActionListener() {
          @Override
          public void actionPerformed(ActionEvent e) {
