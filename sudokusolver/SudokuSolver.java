@@ -6,6 +6,9 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -41,7 +44,7 @@ public class SudokuSolver extends JFrame {
 
 	private void createGrid() {
 	   createGridFields();
-	   
+
 	   JPanel gridPanel = new JPanel(new GridLayout(3, 3, 2, 2));
 	   gridPanel.setBackground(Color.BLACK);
 	   for(int i = 0; i < 3; i++) {
@@ -50,15 +53,17 @@ public class SudokuSolver extends JFrame {
 	         gridPanel.add(blockPanel);
 	      }
 	   }
-	   
+
 	   getContentPane().add(gridPanel, BorderLayout.CENTER);
 	}
-	
+
 	private void createGridFields() {
 	   mGrid = new JTextField[9][];
 	   for(int i = 0; i < 9; i++) {
 	      mGrid[i] = new JTextField[9];
 	      for(int j = 0; j < 9; j++) {
+				final int curRow = i;
+            final int curCol = j;
             try {
                mGrid[i][j] = new JFormattedTextField(new MaskFormatter("#"));
             }
@@ -67,10 +72,35 @@ public class SudokuSolver extends JFrame {
             }
             mGrid[i][j].setHorizontalAlignment(JFormattedTextField.CENTER);
             mGrid[i][j].setForeground(Color.BLACK);
+			   mGrid[i][j].addKeyListener(new KeyAdapter() {
+               @Override
+               public void keyPressed(KeyEvent e) {
+                  switch (e.getKeyCode()) {
+                  case KeyEvent.VK_UP:
+                     if (curRow > 0)
+                        mGrid[curRow - 1][curCol].requestFocus();
+                     break;
+                  case KeyEvent.VK_DOWN:
+                     if (curRow < mGrid.length - 1)
+                        mGrid[curRow + 1][curCol].requestFocus();
+                     break;
+                  case KeyEvent.VK_LEFT:
+                     if (curCol > 0)
+                        mGrid[curRow][curCol - 1].requestFocus();
+                     break;
+                  case KeyEvent.VK_RIGHT:
+                     if (curCol < mGrid[curRow].length - 1)
+                        mGrid[curRow][curCol + 1].requestFocus();
+                     break;
+                  default:
+                     break;
+                  }
+               }
+            });
 	      }
 	   }
 	}
-	
+
 	private JPanel createBlockGrid(int blockX, int blockY) {
 	   JPanel block = new JPanel(new GridLayout(3, 3, 0, 0));
 	   for(int i = blockX*3; i < blockX*3 + 3; i++) {
