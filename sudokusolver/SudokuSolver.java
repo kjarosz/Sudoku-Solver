@@ -40,24 +40,45 @@ public class SudokuSolver extends JFrame {
 	}
 
 	private void createGrid() {
-	   JPanel gridPanel = new JPanel();
-	   gridPanel.setLayout(new GridLayout(9, 9, 0, 0));
+	   createGridFields();
+	   
+	   JPanel gridPanel = new JPanel(new GridLayout(3, 3, 2, 2));
+	   gridPanel.setBackground(Color.BLACK);
+	   for(int i = 0; i < 3; i++) {
+	      for(int j = 0; j < 3; j++) {
+	         JPanel blockPanel = createBlockGrid(i, j);
+	         gridPanel.add(blockPanel);
+	      }
+	   }
+	   
+	   getContentPane().add(gridPanel, BorderLayout.CENTER);
+	}
+	
+	private void createGridFields() {
 	   mGrid = new JTextField[9][];
 	   for(int i = 0; i < 9; i++) {
 	      mGrid[i] = new JTextField[9];
 	      for(int j = 0; j < 9; j++) {
-	         try {
-	            mGrid[i][j] = new JFormattedTextField(new MaskFormatter("#"));
-	         }
-	         catch (ParseException ex) {
-	            mGrid[i][j] = new JTextField(1);
-	         }
-	         mGrid[i][j].setHorizontalAlignment(JFormattedTextField.CENTER);
-	         mGrid[i][j].setForeground(Color.BLACK);
-	         gridPanel.add(mGrid[i][j]);
+            try {
+               mGrid[i][j] = new JFormattedTextField(new MaskFormatter("#"));
+            }
+            catch (ParseException ex) {
+               mGrid[i][j] = new JTextField(1);
+            }
+            mGrid[i][j].setHorizontalAlignment(JFormattedTextField.CENTER);
+            mGrid[i][j].setForeground(Color.BLACK);
 	      }
 	   }
-	   getContentPane().add(gridPanel, BorderLayout.CENTER);
+	}
+	
+	private JPanel createBlockGrid(int blockX, int blockY) {
+	   JPanel block = new JPanel(new GridLayout(3, 3, 0, 0));
+	   for(int i = blockX*3; i < blockX*3 + 3; i++) {
+	      for(int j = blockY*3; j < blockY*3 + 3; j++) {
+	         block.add(mGrid[i][j]);
+	      }
+	   }
+	   return block;
 	}
 
 	private void createButtonPanel() {
