@@ -201,6 +201,7 @@ public class SudokuSolver extends JFrame {
 	   for(int i = 0; i < 9; i++) {
 	      for(int j = 0; j < 9; j++) {
 	         mGrid[i][j].setText(Integer.toString(solution.getValue(i, j)));
+				mGrid[i][j].setEditable(false);
 	      }
 	   }
 	}
@@ -210,6 +211,7 @@ public class SudokuSolver extends JFrame {
 	      for(int j = 0; j < 9; j++) {
 	         mGrid[i][j].setText("");
 	         mGrid[i][j].setForeground(Color.BLACK);
+				mGrid[i][j].setEditable(true);
 	      }
 	}
 
