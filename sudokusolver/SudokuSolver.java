@@ -14,7 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.JFormattedTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.text.MaskFormatter;
@@ -24,7 +23,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import java.text.ParseException;
 
 public class SudokuSolver extends JFrame {
-	private JTextField mGrid[][];
+	private JFormattedTextField mGrid[][];
 	private boolean mSolved;
 
 	public SudokuSolver() {
@@ -58,9 +57,9 @@ public class SudokuSolver extends JFrame {
 	}
 
 	private void createGridFields() {
-	   mGrid = new JTextField[9][];
+	   mGrid = new JFormattedTextField[9][];
 	   for(int i = 0; i < 9; i++) {
-	      mGrid[i] = new JTextField[9];
+	      mGrid[i] = new JFormattedTextField[9];
 	      for(int j = 0; j < 9; j++) {
 				final int curRow = i;
             final int curCol = j;
@@ -68,7 +67,8 @@ public class SudokuSolver extends JFrame {
                mGrid[i][j] = new JFormattedTextField(new MaskFormatter("#"));
             }
             catch (ParseException ex) {
-               mGrid[i][j] = new JTextField(1);
+					System.err.println("ParseException while creating grid.");
+               System.exit(1);
             }
             mGrid[i][j].setHorizontalAlignment(JFormattedTextField.CENTER);
             mGrid[i][j].setForeground(Color.BLACK);
@@ -209,6 +209,7 @@ public class SudokuSolver extends JFrame {
 	private void clearGrid() {
 	   for(int i = 0; i < 9; i++)
 	      for(int j = 0; j < 9; j++) {
+				mGrid[i][j].setValue(null);
 	         mGrid[i][j].setText("");
 	         mGrid[i][j].setForeground(Color.BLACK);
 				mGrid[i][j].setEditable(true);
