@@ -10,6 +10,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -37,6 +38,9 @@ public class SudokuSolver extends JFrame {
 	   mSolved = false;
 	   createGrid();
 	   createButtonPanel();
+
+		ImageIcon appIcon = new ImageIcon("src/images/Sudoku-Solver.png");
+		setIconImage(appIcon.getImage());
 
 	   setVisible(true);
 	}
