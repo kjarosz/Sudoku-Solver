@@ -115,7 +115,7 @@ public class SudokuSolver extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// Right click
-				if(e.getButton() == MouseEvent.BUTTON3) {
+				if(e.getButton() == MouseEvent.BUTTON3 && cell.isEditable()) {
 					mContextInputMenu.displayContextMenu(cell, e.getPoint());
 				}
 			}
@@ -139,17 +139,18 @@ public class SudokuSolver extends JFrame {
       solveButton.addActionListener(new ActionListener() {
          @Override
          public void actionPerformed(ActionEvent e) {
-			if(mSolved) {
-				clearGrid();
-				solveButton.setText("Solve");
-				mSolved = false;
-				mGrid[0][0].requestFocus();
-			}
-			else {
-				solveGrid();
-				solveButton.setText("Clear");
-				mSolved = true;
-			}
+				if(mSolved) {
+					clearGrid();
+					solveButton.setText("Solve");
+					mSolved = false;
+					mGrid[0][0].requestFocus();
+				}
+				else {
+					if(solveGrid()) {
+						solveButton.setText("Clear");
+						mSolved = true;
+					}
+				}
          }
       });
       buttonPanel.add(solveButton);
@@ -157,16 +158,18 @@ public class SudokuSolver extends JFrame {
       getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 	}
 
-	private void solveGrid() {
+	private boolean solveGrid() {
 	   int grid[][] = getInputGrid();
 	   if(grid == null)
-	      return;
+	      return false;
 
 	   final OptionsGrid solution = getSolution(grid);
 	   if(solution == null)
-	      return;
+	      return false;
 
 	   updateGridWithSolution(solution);
+	   
+	   return true;
 	}
 
 	private int[][] getInputGrid() {
