@@ -1,28 +1,47 @@
+/*
+Copyright (C) 2014  Kamil Jarosz and Christopher Kyle Horton
+
+This file is part of Sudoku-Solver.
+
+Sudoku-Solver is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package sudokusolver;
 
 public class SinglesScanner {
    private OptionsGrid mOptionsGrid;
-   
+
    public SinglesScanner(OptionsGrid optionsGrid) {
       mOptionsGrid = optionsGrid;
    }
-   
+
    /*
     * This function finds all cells in which there can be only one
     * entry and fills them in.
     */
    public boolean fillSingleSolutions() {
       return     fillSingleSolutionsInSingleCells()
-            ||   fillSingleSolutionsInBlocks()  
-            ||   fillSingleSolutionsInRows() 
+            ||   fillSingleSolutionsInBlocks()
+            ||   fillSingleSolutionsInRows()
             ||   fillSingleSolutionsInColumns();
    }
-   
+
    /*
     * Goes through each cell one by one and if and if any
     * of the cells offers only one valid entry, the algorithm
     * pencils it in. If any cell has been filled, the function
-    * returns true. Otherwise, false.  
+    * returns true. Otherwise, false.
     */
    private boolean fillSingleSolutionsInSingleCells() {
       boolean cellFilled = false;
@@ -47,7 +66,7 @@ public class SinglesScanner {
       }
       return cellFilled;
    }
-   
+
    /*
     * This function takes entries 1-9 for each 3x3 block
     * and checks if any of the entries have a unique place
@@ -64,7 +83,7 @@ public class SinglesScanner {
       }
       return cellFilled;
    }
-   
+
    /*
     * This function checks for unique solutions in one 3x3 block.
     */
@@ -92,7 +111,7 @@ public class SinglesScanner {
       }
       return entryFilled;
    }
-   
+
    /*
     * Same as the functions above.
     */
@@ -118,7 +137,7 @@ public class SinglesScanner {
       }
       return entryFilled;
    }
-   
+
    /*
     * Same as the functions above.
     */
