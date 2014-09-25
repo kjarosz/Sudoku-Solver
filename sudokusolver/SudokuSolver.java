@@ -8,22 +8,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.ParseException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JFormattedTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.text.MaskFormatter;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
-import java.text.ParseException;
+import javax.swing.text.MaskFormatter;
 
 public class SudokuSolver extends JFrame {
+	private ContextMenu mContextInputMenu;
 	private JFormattedTextField mGrid[][];
 	private boolean mSolved;
 
@@ -36,6 +37,7 @@ public class SudokuSolver extends JFrame {
 	   contentPanel.setLayout(new BorderLayout());
 
 	   mSolved = false;
+	   mContextInputMenu = new ContextMenu();
 	   createGrid();
 	   createButtonPanel();
 
@@ -65,8 +67,6 @@ public class SudokuSolver extends JFrame {
 	   for(int i = 0; i < 9; i++) {
 	      mGrid[i] = new JFormattedTextField[9];
 	      for(int j = 0; j < 9; j++) {
-				final int curRow = i;
-            final int curCol = j;
             try {
                mGrid[i][j] = new JFormattedTextField(new MaskFormatter("#"));
             }
@@ -76,33 +76,50 @@ public class SudokuSolver extends JFrame {
             }
             mGrid[i][j].setHorizontalAlignment(JFormattedTextField.CENTER);
             mGrid[i][j].setForeground(Color.BLACK);
-			   mGrid[i][j].addKeyListener(new KeyAdapter() {
-               @Override
-               public void keyPressed(KeyEvent e) {
-                  switch (e.getKeyCode()) {
-                  case KeyEvent.VK_UP:
-                     if (curRow > 0)
-                        mGrid[curRow - 1][curCol].requestFocus();
-                     break;
-                  case KeyEvent.VK_DOWN:
-                     if (curRow < mGrid.length - 1)
-                        mGrid[curRow + 1][curCol].requestFocus();
-                     break;
-                  case KeyEvent.VK_LEFT:
-                     if (curCol > 0)
-                        mGrid[curRow][curCol - 1].requestFocus();
-                     break;
-                  case KeyEvent.VK_RIGHT:
-                     if (curCol < mGrid[curRow].length - 1)
-                        mGrid[curRow][curCol + 1].requestFocus();
-                     break;
-                  default:
-                     break;
-                  }
-               }
-            });
+			   mGrid[i][j].addKeyListener(getGridKeyAdapter(i, j));
+			   mGrid[i][j].addMouseListener(getGridMouseAdapter(mGrid[i][j]));
 	      }
 	   }
+	}
+	
+	private KeyAdapter getGridKeyAdapter(final int row, final int col) {
+		return new KeyAdapter() {
+         @Override
+         public void keyPressed(KeyEvent e) {
+            switch (e.getKeyCode()) {
+            case KeyEvent.VK_UP:
+               if (row > 0)
+                  mGrid[row - 1][col].requestFocus();
+               break;
+            case KeyEvent.VK_DOWN:
+               if (row < mGrid.length - 1)
+                  mGrid[row + 1][col].requestFocus();
+               break;
+            case KeyEvent.VK_LEFT:
+               if (col > 0)
+                  mGrid[row][col - 1].requestFocus();
+               break;
+            case KeyEvent.VK_RIGHT:
+               if (col < mGrid[row].length - 1)
+                  mGrid[row][col + 1].requestFocus();
+               break;
+            default:
+               break;
+            }
+         }
+      };
+	}
+	
+	private MouseAdapter getGridMouseAdapter(final JFormattedTextField cell) {
+		return new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// Right click
+				if(e.getButton() == MouseEvent.BUTTON3) {
+					mContextInputMenu.displayContextMenu(cell, e.getPoint());
+				}
+			}
+		};
 	}
 
 	private JPanel createBlockGrid(int blockX, int blockY) {
