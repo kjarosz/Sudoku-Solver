@@ -5,6 +5,12 @@ Solves sudoku puzzles. Input values in the correct grids, press solve, and tada.
 
 To fix whitespacing, set your editor's tab width to 3.
 
+## Screenshots
+
+Before | After
+------ | -----
+![Screenshot before][screenshot-before] | ![Screenshot after][screenshot-after]
+
 ## Setup ##
 
 On Linux, you can execute the following commands in your home folder to get everything set up and run it:
@@ -34,3 +40,6 @@ Alternatively, create a new Java project in Eclipse and set up a `sudokusolver` 
 ![Setup screenshot in Eclipse](http://i.imgur.com/GqmOBnU.png)
 
 Then just hit the Run button to run.
+
+[screenshot-before]: ./screenshots/Sudoku%20Solver%20-%20Before.png
+[screenshot-after]: ./screenshots/Sudoku%20Solver%20-%20After.png
